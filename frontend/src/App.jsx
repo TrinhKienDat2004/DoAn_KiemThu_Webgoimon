@@ -6,15 +6,21 @@ import OrderStatus from './components/OrderStatus';
 import CartDrawer from './components/CartDrawer';
 import { ShoppingCart, ClipboardList } from 'lucide-react';
 
+import AdminLogin from './components/AdminLogin';
+import AdminDashboard from './components/AdminDashboard';
+
 function App() {
-  const { currentView, tableNumber, cart, setCartOpen, setView } = useStore();
+  const { currentView, tableNumber, cart, setCartOpen, setView, admin } = useStore();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  // If on admin view and not logged in, force login (except if already on adminLogin)
+  const isAdminView = currentView.startsWith('admin');
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col relative w-full h-full font-sans">
-      {/* Header */}
-      {tableNumber && (
+      {/* Customer Header */}
+      {tableNumber && !isAdminView && (
         <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm px-4 py-3 flex justify-between items-center border-b border-gray-100">
           <div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">SpicyMenu</h1>
@@ -51,16 +57,19 @@ function App() {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col items-center justify-center p-4 overflow-hidden relative w-full">
+      <main className="flex-1 flex flex-col items-center justify-center overflow-hidden relative w-full">
         {currentView === 'welcome' && <WelcomeScreen />}
         {currentView === 'menu' && <MenuScreen />}
         {currentView === 'orderStatus' && <OrderStatus />}
+        {currentView === 'adminLogin' && <AdminLogin />}
+        {currentView === 'adminDashboard' && <AdminDashboard />}
       </main>
 
       {/* Global Modals */}
-      <CartDrawer />
+      {!isAdminView && <CartDrawer />}
     </div>
   );
 }
+
 
 export default App;

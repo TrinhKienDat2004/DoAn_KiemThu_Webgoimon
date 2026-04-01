@@ -32,10 +32,14 @@ const MenuScreen = () => {
 
   const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
-  const filteredItems = items.filter(item => 
-    item.category_id === selectedCategory && 
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredItems = items.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+    if (searchQuery.trim() !== "") {
+      return matchesSearch;
+    }
+    return item.category_id === selectedCategory && matchesSearch;
+  });
+
 
   const renderTags = (tagsString) => {
     if (!tagsString) return null;

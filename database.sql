@@ -127,4 +127,44 @@ CREATE TABLE `support_calls` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table `reviews`
+--
+DROP TABLE IF EXISTS `reviews`;
+CREATE TABLE `reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `food_item_id` int(11) NOT NULL,
+  `customer_name` varchar(100) DEFAULT 'Khách hàng',
+  `rating` tinyint(4) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `reviews_chk_1` CHECK (`rating` >= 1 and `rating` <= 5),
+  FOREIGN KEY (`food_item_id`) REFERENCES `food_items` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `reviews` (`food_item_id`, `customer_name`, `rating`, `comment`) VALUES 
+(1, 'Thanh Trực', 5, 'Salad rất tươi, sốt chanh leo ngon tuyệt!'),
+(3, 'Minh Quân', 4, 'Bò bít tết mềm, nước sốt hơi đậm đà xíu.'),
+(6, 'Hồng Hạnh', 5, 'Trà đào rất thơm, miếng đào to và giòn.');
+
+--
+-- Table structure for table `admins`
+--
+DROP TABLE IF EXISTS `admins`;
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','staff') DEFAULT 'staff',
+  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `admins` (`id`, `username`, `password`, `role`) VALUES
+(1, 'admin', 'admin123', 'admin'),
+(2, 'staff', 'staff123', 'staff');
+
 SET FOREIGN_KEY_CHECKS=1;
+

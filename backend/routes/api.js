@@ -167,4 +167,36 @@ router.post('/call-staff', async (req, res) => {
     }
 });
 
+// 6. Get Reviews for an item
+router.get('/reviews/:itemId', async (req, res) => {
+    try {
+        const itemId = req.params.itemId;
+        const [rows] = await db.query(
+            'SELECT * FROM reviews WHERE food_item_id = ? ORDER BY created_at DESC',
+            [itemId]
+        );
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi server', details: error.message });
+    }
+});
+
+// 7. Post a Review
+router.post('/reviews', async (req, res) => {
+    try {
+        const { food_item_id, customer_name, rating, comment } = req.body;
+        if (!food_item_id || !rating) {
+            return res.status(400).json({ error: 'Thiếu thông tin bắt buộc (món ăn, đánh giá)' });
+        }
+        await db.query(
+            'INSERT INTO reviews (food_item_id, customer_name, rating, comment) VALUES (?, ?, ?, ?)',
+            [food_item_id, customer_name || 'Khách hàng', rating, comment || '']
+        );
+        res.json({ message: 'Cảm ơn bạn đã đánh giá!' });
+    } catch (error) {
+        res.status(500).json({ error: 'Lỗi server', details: error.message });
+    }
+});
+
+
 module.exports = router;

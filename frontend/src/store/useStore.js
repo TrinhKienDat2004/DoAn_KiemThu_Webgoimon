@@ -30,12 +30,18 @@ const useStore = create((set) => ({
   clearCart: () => set({ cart: [] }),
   
   // App views
-  currentView: 'welcome', // welcome, menu, orderStatus
+  currentView: 'welcome', // welcome, menu, orderStatus, adminLogin, adminDashboard
   setView: (view) => set({ currentView: view }),
   
+  // Admin state
+  admin: null,
+  setAdmin: (admin) => set({ admin }),
+  logoutAdmin: () => set({ admin: null, currentView: 'welcome' }),
+
   // Modals
   isCartOpen: false,
   setCartOpen: (isOpen) => set({ isCartOpen: isOpen }),
 }));
+
 
 export default useStore;

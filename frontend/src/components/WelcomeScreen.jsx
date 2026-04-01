@@ -76,7 +76,15 @@ const WelcomeScreen = () => {
           <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
         </button>
       </form>
+
+      <button 
+        onClick={() => setView('adminLogin')}
+        className="text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest mt-4"
+      >
+        Dành cho nhân viên
+      </button>
     </div>
+
   );
 };
 
